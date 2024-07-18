@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { Link } from "react-router-dom";
-import { LOGIN, SEND_EMAIL } from "../utils/mutations";
+import { LOGIN } from "../utils/mutations";
 import Auth from "../utils/auth";
 
 function Login(props) {
   const [formState, setFormState] = useState({ email: "", password: "" });
   const [login, { error }] = useMutation(LOGIN);
-  const [sendemail, { error: sendemailerr }] = useMutation(SEND_EMAIL);
+  // const [sendemail, { error: sendemailerr }] = useMutation(SEND_EMAIL);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -18,11 +18,11 @@ function Login(props) {
       const token = mutationResponse.data.login.token;
       Auth.login(token);
 
-      const sendEmailResponse = await sendemail({
-        variables: { email: formState.email },
-      });
+      // const sendEmailResponse = await sendemail({
+      //   variables: { email: formState.email },
+      // });
 
-      console.log(sendEmailResponse.responseMsg);
+      // console.log(sendEmailResponse.responseMsg);
     } catch (e) {
       console.log(e);
     }

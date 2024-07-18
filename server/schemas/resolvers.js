@@ -143,7 +143,6 @@ const resolvers = {
       return { token, user };
     },
     sendEmail: async (parent, { email }) => {
-      email = "shwetakadam5@gmail.com";
       console.log({ email });
       let emailResponseMessage;
       const transporter = nodemailer.createTransport({
