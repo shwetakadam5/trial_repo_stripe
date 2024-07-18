@@ -3,6 +3,8 @@ const { User, Product, Category, Order } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 const stripe = require("stripe")(process.env.STRIPE_SK);
 
+const nodemailer = require("nodemailer");
+
 const resolvers = {
   Query: {
     categories: async () => {
@@ -139,6 +141,40 @@ const resolvers = {
       const token = signToken(user);
 
       return { token, user };
+    },
+    sendEmail: async (parent, { email }) => {
+      email = "shwetakadam5@gmail.com";
+      console.log({ email });
+      let emailResponseMessage;
+      const transporter = nodemailer.createTransport({
+        // host: process.env.SMTP_HOST,
+        // port: process.env.SMTP_PORT,
+        // secure: false, // Use `true` for port 465, `false` for all other ports
+        service: process.env.SMTP_HOST,
+        auth: {
+          user: process.env.SMTP_MAIL,
+          pass: process.env.SMTP_PASSWORD,
+        },
+      });
+
+      let mailOptions = {
+        from: process.env.SMTP_MAIL,
+        to: email,
+        subject: "Sending Email using Node.js",
+        text: "My First Trial Email!",
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+          emailResponseMessage = "Error Sending Email";
+        } else {
+          console.log("Email sent: " + info.response);
+          emailResponseMessage = "Sent EMail";
+        }
+      });
+
+      return emailResponseMessage;
     },
   },
 };
